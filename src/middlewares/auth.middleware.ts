@@ -40,6 +40,12 @@ const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction): vo
         // Verifica y decodifica el token
         const decoded = jwt.verify(token, secret) as { userId: string };
 
+        // Valida que el token contenga un userId válido antes de confiar en él
+        if (!decoded.userId || typeof decoded.userId !== 'string') {
+            res.status(401).json({ error: 'Token inválido: userId no encontrado' });
+            return;
+        }
+
         // Inyecta el userId ya verificado en la request para que los controladores lo utilicen de manera segura
         req.userId = decoded.userId;
 

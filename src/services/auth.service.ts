@@ -8,11 +8,14 @@ import { IUser } from '../interfaces/IUser';
  * Hashea la contraseña irreversiblemente antes de que se guarde para que nunca se almacene en texto común.
  * @param email - Email del usuario
  * @param password - Contraseña del usuario
- * @returns El usuario creado (id y email)
+ * @returns El usuario creado (documento completo)
  */
 const register = async (email: string, password: string): Promise<IUser> => {
+    // Normaliza el email antes de buscar para evitar duplicados
+    const normalizedEmail = email.trim().toLowerCase();
+
     // Verifica si existe un usuario con el mismo email
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
         throw { status: 409, message: 'Ya existe un usuario con ese email' };
     }
@@ -21,7 +24,7 @@ const register = async (email: string, password: string): Promise<IUser> => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Crea y guarda el usuario en la base de datos
-    const user = await User.create({ email, password: hashedPassword });
+    const user = await User.create({ email: normalizedEmail, password: hashedPassword });
 
     return user;
 };
@@ -34,8 +37,11 @@ const register = async (email: string, password: string): Promise<IUser> => {
  * @returns Un objeto con el token JWT generado
  */
 const login = async (email: string, password: string): Promise<{ token: string }> => {
+    // Normaliza el email antes de buscar
+    const normalizedEmail = email.trim().toLowerCase();
+
     // Busca al usuario por email en la base de datos
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
         throw { status: 401, message: 'Credenciales inválidas' };
     }
