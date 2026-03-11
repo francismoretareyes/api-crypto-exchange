@@ -38,7 +38,7 @@ const createTransaction = async (userId: string, assetId: string, type: 'BUY' | 
         const token = process.env.COINCAP_API_KEY;
         const config = token ? { headers: { 'Authorization': `Bearer ${token}` } } : {};
 
-        const response = await axios.get(`https://api.coincap.io/v2/assets/${asset.coincapId}`, config);
+        const response = await axios.get(`https://rest.coincap.io/v3/assets/${asset.coincapId}`, config);
         currentPriceUsd = parseFloat(response.data.data.priceUsd);
     } catch (error) {
         // Si CoinCap falla usa el último precio guardado en el Asset
