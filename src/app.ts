@@ -1,6 +1,7 @@
 import express from 'express';
 import authRoutes from './routes/auth.routes';
 import assetRoutes from './routes/asset.routes';
+import transactionRoutes from './routes/transaction.routes';
 
 const app = express();
 app.disable('x-powered-by');
@@ -12,5 +13,7 @@ app.use(express.json());
 app.use('/auth', authRoutes);
 //Ruta para el CRUD de los assets
 app.use('/assets', assetRoutes);
+//Ruta para el CRUD de transactions
+app.use('/transactions', transactionRoutes);
 
 export default app;
