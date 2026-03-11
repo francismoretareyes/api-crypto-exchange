@@ -2,6 +2,7 @@ import express from 'express';
 import authRoutes from './routes/auth.routes';
 import assetRoutes from './routes/asset.routes';
 import transactionRoutes from './routes/transaction.routes';
+import portfolioRoutes from './routes/portfolio.routes';
 
 const app = express();
 app.disable('x-powered-by');
@@ -15,5 +16,7 @@ app.use('/auth', authRoutes);
 app.use('/assets', assetRoutes);
 //Ruta para el CRUD de transactions
 app.use('/transactions', transactionRoutes);
+//Ruta para el CRUD de portfolio
+app.use('/portfolio', portfolioRoutes);
 
 export default app;
